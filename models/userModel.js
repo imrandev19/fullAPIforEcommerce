@@ -22,6 +22,9 @@ const userModel = new mongoose.Schema({
     required: [true, "Password must be required"],
     minLength: [3, "Username must be at least 3 characters long"],
   },
+  otp:{
+    type:String
+  },
   role:{
     type: String,
     enum: ["user", "admin"],

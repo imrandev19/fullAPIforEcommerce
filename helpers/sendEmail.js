@@ -2,8 +2,9 @@ const nodemailer = require("nodemailer");
 const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
-async function sendEmail(email) {
- 
+const sendOtp = require("./sendOTP");
+async function sendEmail(email, otp) {
+
   const COMPANY_EMAIL = process.env.COMPANY_EMAIL;
   const EMAIL_PASSKEY = process.env.EMAIL_PASSKEY;
   const transporter = nodemailer.createTransport({
@@ -21,14 +22,14 @@ async function sendEmail(email) {
    // Dynamic data
    const replacements = {
      name: email,
-     code: "236548",
+     code: otp,
      year: new Date().getFullYear()
    };
    const htmlToSend = template(replacements);
   const info = await transporter.sendMail({
     from: COMPANY_EMAIL,
     to: email,
-    subject: "Email Verification Code",
+    subject: "Email Verification",
     html: htmlToSend,
   });
 }

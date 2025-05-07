@@ -1,10 +1,13 @@
 const emailcheck = require("../helpers/emailAddressValidation");
 const sendEmail = require("../helpers/sendEmail");
+const sendOtp = require("../helpers/sendOTP");
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
+
 const singupController = async (req, res) => {
   let { name, username, email, password, phone, address, city, country } =
     req.body;
+    const otp = sendOtp()
   try {
     if (!emailcheck(email)) {
       return res.send("Email is not Valid");
@@ -22,9 +25,10 @@ const singupController = async (req, res) => {
           address,
           city,
           country,
+          otp
         });
         await signupUser.save();
-        sendEmail(email)
+        sendEmail(email,otp)
         const existingUser = await userModel
           .findOne({ email })
           .select("-password");
