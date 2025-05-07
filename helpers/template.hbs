@@ -1,0 +1,73 @@
+<!-- template.hbs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 600px;
+      margin: 40px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #4a90e2;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    .body {
+      padding: 30px;
+    }
+    .body h1 {
+      margin-top: 0;
+    }
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #4a90e2;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .footer {
+      font-size: 12px;
+      color: #999999;
+      padding: 20px;
+      text-align: center;
+    }
+    a {
+      color: #4a90e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Welcome to Our Community!</h2>
+    </div>
+    <div class="body">
+      <h1>Hello {{name}},</h1>
+      <p>We're excited to have you join us! Click the button below to verify your email and complete your registration:</p>
+      <p> The Email Verification Code is {{code}}</p>
+      <p>The Code is vaild for next 5 minutes</p>
+     
+    </div>
+    <div class="footer">
+      &copy; {{year}} Your Company. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
+

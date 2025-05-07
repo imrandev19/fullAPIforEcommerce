@@ -2,29 +2,28 @@ const mongoose = require("mongoose");
 
 const userModel = new mongoose.Schema({
   name: {
-    type: "String",
+    type: String,
     required: [true, "Username must be required"],
   },
   username: {
-    type: "String",
+    type: String,
     required: [true, "Username must be required"],
     unique: [true, "The Username has already exists.Try Another One"],
     minLength: [3, "Username must be at least 3 characters long"],
     maxLength: [20, "Username cannot exceed 20 characters"]
   },
   email:{
-    type: "String",
+    type: String,
     required: [true, "Email must be required"],
     unique: [true, "The Email has already exists.Try Another One"],
   },
   password:{
-    type: "String",
+    type: String,
     required: [true, "Password must be required"],
     minLength: [3, "Username must be at least 3 characters long"],
-    maxLength: [20, "Username cannot exceed 20 characters"]
   },
   role:{
-    type: "String",
+    type: String,
     enum: ["user", "admin"],
     default:"user"
   },
@@ -33,20 +32,20 @@ const userModel = new mongoose.Schema({
     default:false
   },
   phone:{
-    type: "String",
+    type: String,
     required: [true, "Phone Number must be required"],
     unique: [true, "The Phone Number has already exists.Try Another One"],
     minLength: [10, "Phone Number must be at least 10 digit long"],
     maxLength: [15, "Phone Number cannot exceed 15 characters"]
   },
   address:{
-    type: "String",
+    type: String,
   },
   city:{
-    type: "String",
+    type: String,
   },
   country:{
-    type: "String",
+    type: String,
   },
 },
 {timestamps:true}
