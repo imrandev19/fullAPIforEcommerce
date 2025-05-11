@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const singupController = async (req, res) => {
   let { name, username, email, password, phone, address, city, country } =
     req.body;
-    const otp = sendOtp()
+  const otp = sendOtp();
   try {
     if (!emailcheck(email)) {
       return res.send("Email is not Valid");
@@ -25,24 +25,25 @@ const singupController = async (req, res) => {
           address,
           city,
           country,
-          otp
+          otp,
         });
         await signupUser.save();
-        sendEmail(email,otp, name)
-        const existingUser = await userModel
+        sendEmail(email, otp, name);
+        setTimeout(async () => {
+          await userModel.findOneAndUpdate(
+            { email },
+            { otp: null },
+            { new: true }
+          );
+        }, 300000);
+        const userResponse = await userModel
           .findOne({ email })
-          .select("-password");
-          setTimeout(async() => {
-            await userModel.findOneAndUpdate({email}, {otp:null},{new:true})
-          }, 300000);
-        if (existingUser) {
-          return res.status(200).json({
-            success: true,
-            message: "User Created Successfully",
-            data: existingUser,
-          });
-          
-        }
+          .select("-password -otp");
+        return res.status(200).json({
+          success: true,
+          message: "User Created Successfully",
+          data: userResponse,
+        });
       });
     }
   } catch (error) {
