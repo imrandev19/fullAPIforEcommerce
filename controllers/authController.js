@@ -28,10 +28,13 @@ const singupController = async (req, res) => {
           otp
         });
         await signupUser.save();
-        sendEmail(email,otp)
+        sendEmail(email,otp, name)
         const existingUser = await userModel
           .findOne({ email })
           .select("-password");
+          setTimeout(async() => {
+            await userModel.findOneAndUpdate({email}, {otp:null},{new:true})
+          }, 300000);
         if (existingUser) {
           return res.status(200).json({
             success: true,

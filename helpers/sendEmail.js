@@ -3,7 +3,7 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
 const sendOtp = require("./sendOTP");
-async function sendEmail(email, otp) {
+async function sendEmail(email, otp, name) {
 
   const COMPANY_EMAIL = process.env.COMPANY_EMAIL;
   const EMAIL_PASSKEY = process.env.EMAIL_PASSKEY;
@@ -21,7 +21,7 @@ async function sendEmail(email, otp) {
    
    // Dynamic data
    const replacements = {
-     name: email,
+     name: name,
      code: otp,
      year: new Date().getFullYear()
    };
