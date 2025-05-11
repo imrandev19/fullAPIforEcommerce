@@ -25,6 +25,9 @@ const userModel = new mongoose.Schema({
   otp:{
     type:String
   },
+  otpCreatedAt: {
+  type: Date,
+},
   role:{
     type: String,
     enum: ["user", "admin"],

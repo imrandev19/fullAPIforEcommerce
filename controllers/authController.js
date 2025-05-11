@@ -1,17 +1,24 @@
 const emailcheck = require("../helpers/emailAddressValidation");
+const otpVerify = require("../helpers/otpVerify");
 const sendEmail = require("../helpers/sendEmail");
 const sendOtp = require("../helpers/sendOTP");
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
-const singupController = async (req, res) => {
+async function signupController(req, res) {
   let { name, username, email, password, phone, address, city, country } =
     req.body;
   const otp = sendOtp();
   try {
     if (!emailcheck(email)) {
-      return res.send("Email is not Valid");
+      return res.status(400).send("Email is not Valid");
     } else {
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Email already registered" });
+      }
       bcrypt.hash(password, 10, async function (err, hash) {
         if (err) {
           return res.status(500).json({ success: false, message: err });
@@ -26,16 +33,11 @@ const singupController = async (req, res) => {
           city,
           country,
           otp,
+          otpCreatedAt: new Date(),
         });
         await signupUser.save();
         sendEmail(email, otp, name);
-        setTimeout(async () => {
-          await userModel.findOneAndUpdate(
-            { email },
-            { otp: null },
-            { new: true }
-          );
-        }, 300000);
+
         const userResponse = await userModel
           .findOne({ email })
           .select("-password -otp");
@@ -52,6 +54,28 @@ const singupController = async (req, res) => {
       message: error.message || "Something Went Wrong",
     });
   }
-};
+}
+async function otpVerifyController(req, res) {
+  try {
+    let { email, otp } = req.body;
+    const result = await otpVerify(email, otp);
+    if (!result.success) {
+      return res.status(400).json(result);
+    } else {
+      await userModel.findOneAndUpdate(
+        { email },
+        { isVerified: true },
+        { new: true }
+      );
+      
+      return res.status(200).json({ success: true, message: "OTP Verified" });
+    }
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+}
+async function loginController(req, res) {
+  res.send("login");
+}
 
-module.exports = singupController;
+module.exports = { signupController, loginController, otpVerifyController };
